@@ -9,8 +9,16 @@ export default class LayersProvider extends React.Component {
     selectedMaps: [],
     toggleMap: this.toggleMap.bind(this),
     updateOpacity: this.updateOpacity.bind(this),
+    fetchedMaps: [],
   };
 
+  componentWillMount() {
+    fetch('/maps.geojson')
+      .then(m => m.json())
+      .then(r => {
+        this.setState({fetchedMaps: r});
+      });
+  }
   render() {
     return (
       <LayersContext.Provider value={this.state}>
