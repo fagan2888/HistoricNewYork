@@ -13,7 +13,7 @@ export default class LayersProvider extends React.Component {
   };
 
   componentWillMount() {
-    fetch('/maps.geojson')
+    fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
         this.setState({fetchedMaps: r});
