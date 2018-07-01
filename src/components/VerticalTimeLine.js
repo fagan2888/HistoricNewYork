@@ -49,6 +49,7 @@ class VerticalTimeLine extends Component {
             onOpacityUpdated={v =>
               this.props.onOpacityUpdated(map.uuid, v)
             }
+            onZoomToMap={this.props.onZoomToMap}
           />
         ))}
       </OuterTimeLine>

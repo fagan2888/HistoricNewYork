@@ -55,6 +55,7 @@ class LayerControls extends Component {
                 <VerticalTimeLine
                   maps={context.filteredMaps()}
                   onShowToggle={id => context.toggleMap(id)}
+                  onZoomToMap = {context.zoomToMap}
                 />
               </TabPanel>
               <TabPanel>
@@ -65,6 +66,7 @@ class LayerControls extends Component {
                   onOpacityUpdated={(id, opacity) =>
                     context.updateOpacity(id, opacity)
                   }
+                  onZoomToMap = {context.zoomToMap}
                 />
               </TabPanel>
             </Tabs>

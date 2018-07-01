@@ -31,8 +31,8 @@ class MapContainer extends Component {
       <LayersConsumer>
         {context => (
           <Map
-            center={position}
-            zoom={12}
+            viewport={context.viewport}
+            onViewportChange= { (v) => context.setMapViewport(v)}
             style={{zIndex: 1, height: '100%'}}
             onClick={loc => context.setLocationFliter(loc.latlng)}>
             <TileLayer

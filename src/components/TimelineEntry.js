@@ -76,6 +76,15 @@ function TimelineEntry({...props}) {
             props.onShowToggle(props.uuid);
           }}
         />
+        <FontAwesome
+          className="vector-square"
+          name="map"
+          size="1x"
+          style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color:'white'}}
+          onClick={() => {
+            props.onZoomToMap(props.uuid);
+          }}
+        />
         {props.showControlls && (
           <Slider
             value={props.opacity}

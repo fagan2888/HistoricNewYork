@@ -2,6 +2,7 @@ import React from 'react';
 import * as turf from '@turf/turf';
 
 const LayersContext = React.createContext();
+const position = [40.71248, -74.007994];
 
 export default class LayersProvider extends React.Component {
   state = {
@@ -11,6 +12,10 @@ export default class LayersProvider extends React.Component {
     locationFilter: null,
     dateFilter: [1800, 1900],
     sizeFilter: [],
+    viewport: {
+      center:position,
+      zoom:12
+    },
     textFilter: '',
     toggleMap: this.toggleMap.bind(this),
     updateOpacity: this.updateOpacity.bind(this),
@@ -19,6 +24,8 @@ export default class LayersProvider extends React.Component {
     setDateFilter: this.setDateFilter.bind(this),
     setTextFilter: this.setTextFilter.bind(this),
     setSizeFilter: this.setSizeFilter.bind(this),
+    setMapViewport: this.setMapViewport.bind(this),
+    zoomToMap : this.zoomToMap.bind(this),
     offset: 0,
     limit: 20,
   };
@@ -39,6 +46,16 @@ export default class LayersProvider extends React.Component {
     );
   }
 
+  zoomToMap(uuid){
+    const map = this.state.maps.features.filter((map)=>map.properties.uuid === uuid)[0]
+    console.log(map)
+    const boundingBox = turf.bbox(map.geometry)
+    console.log(boundingBox)
+  }
+
+  setMapViewport(viewport){
+    this.setState({viewport})
+  }
   setTextFilter(val){
     this.setState({
       textFilter: val
