@@ -36,18 +36,18 @@ class VerticalTimeLine extends Component {
           <TimelineEntry
             key={map.name}
             title={map.name}
-            description={map.data.description}
+            description={map.description}
             validSince={map.validSince}
             validUntil={map.validUntil}
             showControlls={this.props.showControlls}
             opacity={map.opacity}
             mapType="area"
             mapLink="http://somelink.com"
-            uuid={map.data.uuid}
-            imageID = {map.data.imageId}
+            uuid={map.uuid}
+            imageID = {map.imageID}
             onShowToggle={this.props.onShowToggle}
             onOpacityUpdated={v =>
-              this.props.onOpacityUpdated(map.data.uuid, v)
+              this.props.onOpacityUpdated(map.uuid, v)
             }
           />
         ))}

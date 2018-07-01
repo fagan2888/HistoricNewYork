@@ -5,6 +5,7 @@ import {MainText} from '../Typeography';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import VerticalTimeLine from './VerticalTimeLine';
 import {LayersConsumer} from '../contexts/LayersProvider';
+import Filters from './Filters';
 import 'react-tabs/style/react-tabs.css';
 
 const LayerControlsContainer = styled.div`
@@ -41,8 +42,18 @@ class LayerControls extends Component {
                 <Tab>Your Layers</Tab>
               </TabList>
               <TabPanel>
+                <Filters
+                  locationFilter={context.locationFilter}
+                  dateFilter={context.dateFilter}
+                  sizeFilter={context.sizeFilter}
+                  textFilter={context.textFilter}
+                  setDateFilter={context.setDateFilter}
+                  setTextFilter={context.setTextFilter}
+                  setSizeFilter={context.setSizeFilter}
+                  setLocationFliter={context.setLocationFliter}
+                />
                 <VerticalTimeLine
-                  maps={context.maps}
+                  maps={context.filteredMaps()}
                   onShowToggle={id => context.toggleMap(id)}
                 />
               </TabPanel>
