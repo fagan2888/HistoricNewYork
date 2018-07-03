@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import MapContainer from './components/Map';
 import Timeline from './components/Timeline';
-import Details from './components/Details';
 import LayerControls from './components/LayerControls';
 import VerticalTimeLine from './components/VerticalTimeLine';
 import LayersProvider from './contexts/LayersProvider'
