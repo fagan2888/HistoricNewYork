@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import FontAwesome from 'react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import * as Icons from '@fortawesome/fontawesome-free-solid';
 import {Heading, SubHeading, MainText, Tiny} from '../Typeography';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
+console.log('icons are ', Icons)
 const TimeLineEntryContainer = styled.li`
   list-style-type: none;
   position: relative;
@@ -67,20 +69,20 @@ function TimelineEntry({...props}) {
           <Tiny>{props.validSince}</Tiny> <Tiny>-</Tiny>
           <Tiny>{props.validUntil}</Tiny>
         </DateRange>
-        <FontAwesome
+        <FontAwesomeIcon
           className="map-button"
-          name="date"
+          icon={Icons.faMap}
           size="1x"
           style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
           onClick={() => {
             props.onShowToggle(props.uuid);
           }}
         />
-        <FontAwesome
-          className="vector-square"
-          name="map"
+        <FontAwesomeIcon
+          className="map-button"
+          icon={Icons.faEye}
           size="1x"
-          style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', color:'white'}}
+          style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
           onClick={() => {
             props.onZoomToMap(props.uuid);
           }}
