@@ -13,8 +13,8 @@ export default class LayersProvider extends React.Component {
     dateFilter: [1800, 1900],
     sizeFilter: [],
     viewport: {
-      center:position,
-      zoom:12
+      center: position,
+      zoom: 12,
     },
     textFilter: '',
     toggleMap: this.toggleMap.bind(this),
@@ -25,7 +25,8 @@ export default class LayersProvider extends React.Component {
     setTextFilter: this.setTextFilter.bind(this),
     setSizeFilter: this.setSizeFilter.bind(this),
     setMapViewport: this.setMapViewport.bind(this),
-    zoomToMap : this.zoomToMap.bind(this),
+    zoomToMap: this.zoomToMap.bind(this),
+    getSelectedMapsWithDetails: this.getSelectedMapsWithDetails.bind(this),
     offset: 0,
     limit: 20,
   };
@@ -34,8 +35,35 @@ export default class LayersProvider extends React.Component {
     fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
-        this.setState({maps: r});
+        this.setState({maps: r}, this.extractStateFromHash.bind(this));
       });
+  }
+
+  encodeStateToHash() {
+    const serializableState = {
+      viewport: this.state.viewport,
+      selectedMaps: this.state.selectedMaps.map(map => ({
+        opacity: map.opacity,
+        uuid: map.uuid,
+      })),
+    };
+    const hashFrag = btoa(JSON.stringify(serializableState));
+    window.location.hash = hashFrag;
+  }
+
+  extractStateFromHash() {
+    const hash = window.location.hash.slice(1);
+    console.log(hash)
+    try {
+      const serializableState = JSON.parse(atob(hash));
+      console.log(serializableState)
+      this.setState({
+        ...serializableState,
+      });
+    } catch (e) {
+      console.log('invalid URL');
+      window.location.hash = '';
+    }
   }
 
   render() {
@@ -46,38 +74,39 @@ export default class LayersProvider extends React.Component {
     );
   }
 
-  zoomToMap(uuid){
-    const map = this.state.maps.features.filter((map)=>map.properties.uuid === uuid)[0]
-    console.log(map)
-    const boundingBox = turf.bbox(map.geometry)
-    console.log(boundingBox)
+  zoomToMap(uuid) {
+    const map = this.state.maps.features.filter(
+      map => map.properties.uuid === uuid,
+    )[0];
+    console.log(map);
+    const boundingBox = turf.bbox(map.geometry);
+    console.log(boundingBox);
   }
 
-  setMapViewport(viewport){
-    this.setState({viewport})
+  setMapViewport(viewport) {
+    this.setState({viewport}, this.encodeStateToHash.bind(this));
   }
-  setTextFilter(val){
+  setTextFilter(val) {
     this.setState({
-      textFilter: val
-    })
+      textFilter: val,
+    });
   }
 
-  setSizeFilter(val){
+  setSizeFilter(val) {
     this.setState({
-      sizeFilter: val
-    })
+      sizeFilter: val,
+    });
   }
 
   setLocationFliter(latlng) {
-    if(latlng){
+    if (latlng) {
       this.setState({
         locationFilter: [latlng.lng, latlng.lat],
       });
-    }
-    else{
+    } else {
       this.setState({
-        locationFilter: null
-      })
+        locationFilter: null,
+      });
     }
   }
 
@@ -101,19 +130,22 @@ export default class LayersProvider extends React.Component {
       .slice(this.state.offset, this.state.offset + this.state.limit);
   }
 
-  filterDates(maps){
-    return maps.filter((map)=>{
-      return (map.properties.validSince > this.state.dateFilter[0]  && map.properties.validUntil < this.state.dateFilter[1])
-    })
+  filterDates(maps) {
+    return maps.filter(map => {
+      return (
+        map.properties.validSince > this.state.dateFilter[0] &&
+        map.properties.validUntil < this.state.dateFilter[1]
+      );
+    });
   }
 
-  filterText(maps){
-    if (this.state.textFilter.length==0){
-      return maps
+  filterText(maps) {
+    if (this.state.textFilter.length == 0) {
+      return maps;
     }
-    return maps.filter((map)=>{
-      return map.properties.name.indexOf(this.state.textFilter) > -1
-    })
+    return maps.filter(map => {
+      return map.properties.name.indexOf(this.state.textFilter) > -1;
+    });
   }
 
   filterGometries(maps) {
@@ -134,24 +166,29 @@ export default class LayersProvider extends React.Component {
     });
   }
 
+  getSelectedMapsWithDetails() {
+    console.log('selected maps are ', this.state.selectedMaps)
+    const result = this.state.selectedMaps.map(details => {
+      const map = this.state.maps.features.filter(
+        m => m.properties.uuid === details.uuid,
+      )[0];
+      return {...map.properties, opacity: details.opacity};
+    });
+    console.log('returning ' , result)
+    return result
+  }
+
   toggleMap(uuid) {
     if (this.state.selectedMaps.map(m => m.uuid).includes(uuid)) {
       console.log('removing');
       this.setState({
         selectedMaps: this.state.selectedMaps.filter(m => m.uuid !== uuid),
-      });
+      }, this.encodeStateToHash.bind(this));
     } else {
       console.log('adding');
-      const selectedMap = this.state.maps.features.filter(
-        m => m.properties.uuid === uuid,
-      )[0];
-      console.log('selecting map ', selectedMap);
       this.setState({
-        selectedMaps: [
-          ...this.state.selectedMaps,
-          {...selectedMap.properties, opacity: 50},
-        ],
-      });
+        selectedMaps: [...this.state.selectedMaps, { uuid, opacity: 50}],
+      }, this.encodeStateToHash.bind(this));
     }
   }
 }

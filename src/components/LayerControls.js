@@ -60,7 +60,7 @@ class LayerControls extends Component {
               </TabPanel>
               <TabPanel>
                 <VerticalTimeLine
-                  maps={context.selectedMaps}
+                  maps={context.getSelectedMapsWithDetails()}
                   showControlls
                   onShowToggle={id => context.toggleMap(id)}
                   onOpacityUpdated={(id, opacity) =>
