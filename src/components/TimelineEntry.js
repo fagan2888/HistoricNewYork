@@ -97,7 +97,9 @@ function TimelineEntry({...props}) {
           />
         )}
         <SubHeading>{props.title}</SubHeading>
-        <img src={`https://images.nypl.org/index.php?id=${props.imageID}&t=r&download=1`} />
+        <a href={props.link} target="_blank" >
+          <img src={`https://images.nypl.org/index.php?id=${props.imageID}&t=r&download=1`} />
+        </a>
         <MainText style={{paddingLeft: '10px'}}>{props.description}</MainText>
       </Contents>
       <TimeLineSegment />

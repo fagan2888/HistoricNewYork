@@ -46,6 +46,7 @@ class VerticalTimeLine extends Component {
             uuid={map.uuid}
             imageID = {map.imageID}
             onShowToggle={this.props.onShowToggle}
+            link={map.link}
             onOpacityUpdated={v =>
               this.props.onOpacityUpdated(map.uuid, v)
             }
