@@ -3,11 +3,32 @@ import PropTypes from 'prop-types';
 import {MainText} from '../Typeography';
 import Slider from 'rc-slider';
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
+import {Label} from '../Typeography';
+
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import * as Icons from '@fortawesome/fontawesome-free-solid';
+
+import styled from 'styled-components';
+
 import 'rc-slider/assets/index.css';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
+const FilterContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  box-sizing: border-box;
+  padding: 0px 10px;
+`;
+
+const Filter = styled.div`
+  display: flex;
+  flex-direction: rows;
+  color: white;
+  align-items: center
+  margin-bottom:10px;
+`;
 class Filters extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -20,42 +41,84 @@ class Filters extends Component {
 
   render() {
     return (
-      <div>
-        <div>
+      <FilterContainer>
+        <Filter>
+          <FontAwesomeIcon
+            icon={Icons.faCompass}
+            size="1x"
+            style={{color: 'white', marginRight: '10px'}}
+          />
           {this.props.locationFilter ? (
-            <MainText>
+            <Label style={{color: 'white', margin: '0px'}}>
               Location Filter: {this.props.locationFilter[0].toFixed(2)},{' '}
               {this.props.locationFilter[1].toFixed(2)}
-              <a href='#' onClick={(e)=>this.props.setLocationFliter(null)}>clear</a>
-            </MainText>
+              <a href="#" onClick={e => this.props.setLocationFliter(null)}>
+                clear
+              </a>
+            </Label>
           ) : (
-            <MainText>Click on the map to filter by location</MainText>
+            <Label>Click on the map to filter by location</Label>
           )}
-        </div>
-        <Range
-          min={1700}
-          max={2000}
-          step={1}
-          value={this.props.dateFilter}
-          pushable
-          onChange={val => this.props.setDateFilter(val)}
-        />
-        <input
-          type={'text'}
-          value={this.props.textFilter}
-          onChange={e => this.props.setTextFilter(e.target.value)}
-        />
-        <div />
-        <div>
-          <MainText>Map size:</MainText>
-          <CheckboxGroup value={this.props.sizeFilter} onChange={(v)=>{this.props.setSizeFilter(v)}}>
-            <Checkbox value='Block'/> Block
-            <Checkbox value='Neighborhood'/> Neighborhood
-            <Checkbox value='City'/> City
-            <Checkbox value='Country'/> Country
+        </Filter>
+
+        <Filter
+          style={{
+            display: 'flex',
+            flexDirection: 'rows',
+            marginBottom: '10px',
+          }}>
+          <FontAwesomeIcon
+            icon={Icons.faClock}
+            size="1x"
+            style={{color: 'white', marginRight: '10px'}}
+          />
+          <Range
+            min={1700}
+            max={2000}
+            step={1}
+            value={this.props.dateFilter}
+            pushable
+            onChange={val => this.props.setDateFilter(val)}
+          />
+        </Filter>
+        <Filter>
+          <FontAwesomeIcon
+            icon={Icons.faAlignLeft}
+            size="1x"
+            style={{color: 'white', marginRight: '10px'}}
+          />
+          <input
+            type={'text'}
+            value={this.props.textFilter}
+            onChange={e => this.props.setTextFilter(e.target.value)}
+            style={{flex: 1}}
+            placeholder="Search descriptions"
+          />
+        </Filter>
+        <Filter>
+          <FontAwesomeIcon
+            icon={Icons.faSquare}
+            size="1x"
+            style={{color: 'white', marginRight: '10px'}}
+          />
+          <CheckboxGroup
+            style={{
+              flex:1,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+            value={this.props.sizeFilter}
+            onChange={v => {
+              this.props.setSizeFilter(v);
+            }}>
+            <Checkbox value="Block" /> <Label>Block</Label>
+            <Checkbox value="Neighborhood" /> <Label>Neighborhood</Label>
+            <Checkbox value="City" /> <Label>City</Label>
+            <Checkbox value="Country" /> <Label>Country</Label>
           </CheckboxGroup>
-        </div>
-      </div>
+        </Filter>
+      </FilterContainer>
     );
   }
 }

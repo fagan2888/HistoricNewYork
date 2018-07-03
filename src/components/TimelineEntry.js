@@ -17,7 +17,7 @@ const TimeLineEntryContainer = styled.li`
 `;
 
 const TimeLineSegment = () => (
-  <div style={{position: 'relative', width: '20px'}}>
+  <div style={{position: 'relative', width: '20px', marginLeft:'8px'}}>
     <div
       style={{
         height: '100%',
@@ -69,7 +69,7 @@ function TimelineEntry({...props}) {
         </DateRange>
         <FontAwesome
           className="map-button"
-          name="map"
+          name="date"
           size="1x"
           style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
           onClick={() => {

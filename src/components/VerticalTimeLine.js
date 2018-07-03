@@ -9,7 +9,7 @@ const OuterTimeLine = styled.ul`
   position: absolute;
   background: #456990;
   height: 100%;
-  width: 100%;
+  width: 97%;
   box-sizing: border-box;
   padding: 10px
   margin:0;
