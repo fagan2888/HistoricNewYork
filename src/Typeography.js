@@ -29,3 +29,11 @@ export const Tiny= styled.span`
   font-weight: 200;
 	font-size: 0.75rem
 `
+
+export const Label = styled.span`
+  font-family: Source Sans Pro,sans-serif;
+  font-weight: 200;
+  margin:0px;
+  padding:0px;
+	font-size: 0.95rem
+`
