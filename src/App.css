@@ -30,6 +30,7 @@ body {
 
 .map-button {
   color: #2C517A;
+  margin-right:10px;
 }
 
 .map-button:hover {
@@ -39,7 +40,6 @@ body {
 .map-button-selected{
   color: white
 }
-
 
 .react-tabs__tab-list {
   border-bottom: 1px solid #aaa;
