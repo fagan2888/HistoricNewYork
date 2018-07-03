@@ -20,6 +20,8 @@ const LayerControlsContainer = styled.div`
   margin:0;
   list-style-type: none;
   z-index:100;
+  display:flex;
+  flex-direction: column;
 `;
 class LayerControls extends Component {
   static propTypes = {
@@ -36,12 +38,6 @@ class LayerControls extends Component {
       <LayersConsumer>
         {context => (
           <LayerControlsContainer>
-            <Tabs>
-              <TabList>
-                <Tab>Search Layers</Tab>
-                <Tab>Your Layers</Tab>
-              </TabList>
-              <TabPanel>
                 <Filters
                   locationFilter={context.locationFilter}
                   dateFilter={context.dateFilter}
@@ -57,19 +53,6 @@ class LayerControls extends Component {
                   onShowToggle={id => context.toggleMap(id)}
                   onZoomToMap = {context.zoomToMap}
                 />
-              </TabPanel>
-              <TabPanel>
-                <VerticalTimeLine
-                  maps={context.getSelectedMapsWithDetails()}
-                  showControlls
-                  onShowToggle={id => context.toggleMap(id)}
-                  onOpacityUpdated={(id, opacity) =>
-                    context.updateOpacity(id, opacity)
-                  }
-                  onZoomToMap = {context.zoomToMap}
-                />
-              </TabPanel>
-            </Tabs>
           </LayerControlsContainer>
         )}
       </LayersConsumer>

@@ -6,10 +6,9 @@ import {StyleRoot} from 'radium';
 import styled from 'styled-components';
 
 const OuterTimeLine = styled.ul`
-  position: absolute;
+  flex: 1;
   background: #456990;
   height: 100%;
-  width: 97%;
   box-sizing: border-box;
   padding: 10px
   margin:0;

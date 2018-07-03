@@ -16,8 +16,8 @@ const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
 const FilterContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   padding: 0px 10px;
 `;
@@ -107,6 +107,7 @@ class Filters extends Component {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
             }}
             value={this.props.sizeFilter}
             onChange={v => {
