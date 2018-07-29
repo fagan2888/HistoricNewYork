@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {MainText} from '../Typeography';
+import {Tiny,MainText, SubHeading, Heading} from '../Typeography';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import VerticalTimeLine from './VerticalTimeLine';
 import {LayersConsumer} from '../contexts/LayersProvider';
@@ -23,6 +23,7 @@ const LayerControlsContainer = styled.div`
   display:flex;
   flex-direction: column;
 `;
+
 class LayerControls extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -37,23 +38,32 @@ class LayerControls extends Component {
     return (
       <LayersConsumer>
         {context => (
-          <LayerControlsContainer>
-                <Filters
-                  locationFilter={context.locationFilter}
-                  dateFilter={context.dateFilter}
-                  sizeFilter={context.sizeFilter}
-                  textFilter={context.textFilter}
-                  setDateFilter={context.setDateFilter}
-                  setTextFilter={context.setTextFilter}
-                  setSizeFilter={context.setSizeFilter}
-                  setLocationFliter={context.setLocationFliter}
-                />
-                <VerticalTimeLine
-                  maps={context.filteredMaps()}
-                  onShowToggle={id => context.toggleMap(id)}
-                  onZoomToMap = {context.zoomToMap}
-                />
-          </LayerControlsContainer>
+          (context.editable &&
+              <LayerControlsContainer>
+                <Heading style={{color: 'white', margin: '10px 0px'}}>
+                Historic New York Maps
+              </Heading>
+              <Filters
+                locationFilter={context.locationFilter}
+                dateFilter={context.dateFilter}
+                sizeFilter={context.sizeFilter}
+                textFilter={context.textFilter}
+                setDateFilter={context.setDateFilter}
+                setTextFilter={context.setTextFilter}
+                setSizeFilter={context.setSizeFilter}
+                setLocationFliter={context.setLocationFliter}
+              />
+              <VerticalTimeLine
+                maps={context.filteredMaps()}
+                onShowToggle={id => context.toggleMap(id)}
+                onZoomToMap={context.zoomToMap}
+              />
+              <div>
+                <Tiny>About</Tiny>
+                <Tiny>Share</Tiny>
+              </div>
+            </LayerControlsContainer>
+          )
         )}
       </LayersConsumer>
     );

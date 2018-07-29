@@ -10,6 +10,14 @@ export const DateRange = styled.div`
   width: 20%;
 `;
 
+export const MapThumb = (props)=>(
+    <img
+      style={props.style}
+      src={`https://images.nypl.org/index.php?id=${
+        props.imageID
+      }&t=r&download=1`}
+    />
+)
 export const TimeLineEntryContents = styled.div`
   color: white;
   width: 90%;

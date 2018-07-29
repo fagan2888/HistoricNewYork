@@ -52,9 +52,13 @@ class Filters extends Component {
             <Label style={{color: 'white', margin: '0px'}}>
               Location Filter: {this.props.locationFilter[0].toFixed(2)},{' '}
               {this.props.locationFilter[1].toFixed(2)}
-              <a href="#" onClick={e => this.props.setLocationFliter(null)}>
-                clear
-              </a>
+
+              <FontAwesomeIcon
+                icon={Icons.faTimes}
+                size="1x"
+                style={{ marginLeft:'10px', color:'hwite', textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
+                onClick={e => this.props.setLocationFliter(null)}
+              />
             </Label>
           ) : (
             <Label>Click on the map to filter by location</Label>

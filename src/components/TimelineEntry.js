@@ -2,12 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import * as Icons from '@fortawesome/fontawesome-free-solid';
+import * as Icons from '@fortawesome/free-solid-svg-icons';
 import {Heading, SubHeading, MainText, Tiny} from '../Typeography';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import {
+  DateRange,
+  TimeLineEntryContents,
+  TimeLineSegment,
+  MapThumb,
+} from '../CommonElements';
 
-console.log('icons are ', Icons)
+console.log('icons are ', Icons);
+
 const TimeLineEntryContainer = styled.li`
   list-style-type: none;
   position: relative;
@@ -18,53 +23,10 @@ const TimeLineEntryContainer = styled.li`
   align-items: 'stretch';
 `;
 
-const TimeLineSegment = () => (
-  <div style={{position: 'relative', width: '20px', marginLeft:'8px'}}>
-    <div
-      style={{
-        height: '100%',
-        width: '5px',
-        left: '80%',
-        transform: 'translate(-2.5px,-2.5px)',
-        backgroundColor: 'white',
-        position: 'absolute',
-      }}
-    />
-
-    <div
-      style={{
-        top: '50%',
-        left: '80%',
-        width: '20px',
-        height: '20px',
-        position: 'absolute',
-        borderRadius: '20px',
-        position: 'absolute',
-        transform: 'translate(-10px,-10px)',
-        backgroundColor: 'white',
-      }}
-    />
-  </div>
-);
-
-const Contents = styled.div`
-  color: white;
-  width: 90%;
-`;
-
-const DateRange = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  border-bottom: 1px solid white;
-  width: 20%;
-`;
-
 function TimelineEntry({...props}) {
   return (
     <TimeLineEntryContainer>
-      <Contents>
+      <TimeLineEntryContents>
         <DateRange>
           <Tiny>{props.validSince}</Tiny> <Tiny>-</Tiny>
           <Tiny>{props.validUntil}</Tiny>
@@ -87,21 +49,12 @@ function TimelineEntry({...props}) {
             props.onZoomToMap(props.uuid);
           }}
         />
-        {props.showControlls && (
-          <Slider
-            value={props.opacity}
-            onChange={val => props.onOpacityUpdated(val)}
-            min={0}
-            max={100}
-            step={1}
-          />
-        )}
         <SubHeading>{props.title}</SubHeading>
-        <a href={props.link} target="_blank" >
-          <img src={`https://images.nypl.org/index.php?id=${props.imageID}&t=r&download=1`} />
+        <a href={props.link} target="_blank">
+          <MapThumb style={{maxWidth: '300px'}} imageID={props.imageID} />
         </a>
         <MainText style={{paddingLeft: '10px'}}>{props.description}</MainText>
-      </Contents>
+      </TimeLineEntryContents>
       <TimeLineSegment />
     </TimeLineEntryContainer>
   );

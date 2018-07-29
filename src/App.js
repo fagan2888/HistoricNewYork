@@ -4,7 +4,9 @@ import './App.css';
 import MapContainer from './components/Map';
 import Timeline from './components/Timeline';
 import LayerControls from './components/LayerControls';
+import ShareModal from './components/ShareModal';
 import VerticalTimeLine from './components/VerticalTimeLine';
+import Legend from './components/Legend'
 import LayersProvider from './contexts/LayersProvider'
 
 class App extends Component {
@@ -16,6 +18,8 @@ class App extends Component {
           <LayersProvider>
             <MapContainer/>
             <LayerControls/>
+            <Legend />
+            <ShareModal />
           </LayersProvider>
       </div>
     );

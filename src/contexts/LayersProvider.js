@@ -12,6 +12,8 @@ export default class LayersProvider extends React.Component {
     locationFilter: null,
     dateFilter: [1800, 1900],
     sizeFilter: [],
+    editable: true,
+    shareModalVisible: false,
     viewport: {
       center: position,
       zoom: 12,
@@ -25,7 +27,11 @@ export default class LayersProvider extends React.Component {
     setTextFilter: this.setTextFilter.bind(this),
     setSizeFilter: this.setSizeFilter.bind(this),
     setMapViewport: this.setMapViewport.bind(this),
+    makeMapEditable: this.makeMapEditable.bind(this),
+    blankSlate: this.blankSlate.bind(this),
     zoomToMap: this.zoomToMap.bind(this),
+    showShareModal : this.showShareModal.bind(this),
+    closeShareModal : this.closeShareModal.bind(this),
     getSelectedMapsWithDetails: this.getSelectedMapsWithDetails.bind(this),
     offset: 0,
     limit: 20,
@@ -39,29 +45,46 @@ export default class LayersProvider extends React.Component {
       });
   }
 
+  makeMapEditable() {
+    this.setState(
+      {
+        editable: true,
+      },
+      this.encodeStateToHash.bind(this),
+    );
+  }
+
+  blankSlate() {
+    this.setState(
+      {
+        editable: true,
+        selectedMaps: [],
+      },
+      this.encodeStateToHash.bind(this),
+    );
+  }
   encodeStateToHash() {
     const serializableState = {
       viewport: this.state.viewport,
+      editable: this.state.editable,
       selectedMaps: this.state.selectedMaps.map(map => ({
         opacity: map.opacity,
         uuid: map.uuid,
       })),
     };
+
     const hashFrag = btoa(JSON.stringify(serializableState));
     window.location.hash = hashFrag;
   }
 
   extractStateFromHash() {
     const hash = window.location.hash.slice(1);
-    console.log(hash)
     try {
       const serializableState = JSON.parse(atob(hash));
-      console.log(serializableState)
       this.setState({
         ...serializableState,
       });
     } catch (e) {
-      console.log('invalid URL');
       window.location.hash = '';
     }
   }
@@ -98,6 +121,16 @@ export default class LayersProvider extends React.Component {
     });
   }
 
+  showShareModal() {
+    this.setState({
+      shareModalVisible: true,
+    });
+  }
+  closeShareModal(){
+    this.setState({
+      shareModalVisible: false
+    })
+  }
   setLocationFliter(latlng) {
     if (latlng) {
       this.setState({
@@ -111,7 +144,6 @@ export default class LayersProvider extends React.Component {
   }
 
   setDateFilter(range) {
-    console.log('updating date filter: ', range);
     this.setState({
       dateFilter: range,
     });
@@ -167,28 +199,30 @@ export default class LayersProvider extends React.Component {
   }
 
   getSelectedMapsWithDetails() {
-    console.log('selected maps are ', this.state.selectedMaps)
     const result = this.state.selectedMaps.map(details => {
       const map = this.state.maps.features.filter(
         m => m.properties.uuid === details.uuid,
       )[0];
       return {...map.properties, opacity: details.opacity};
     });
-    console.log('returning ' , result)
-    return result
+    return result;
   }
 
   toggleMap(uuid) {
     if (this.state.selectedMaps.map(m => m.uuid).includes(uuid)) {
-      console.log('removing');
-      this.setState({
-        selectedMaps: this.state.selectedMaps.filter(m => m.uuid !== uuid),
-      }, this.encodeStateToHash.bind(this));
+      this.setState(
+        {
+          selectedMaps: this.state.selectedMaps.filter(m => m.uuid !== uuid),
+        },
+        this.encodeStateToHash.bind(this),
+      );
     } else {
-      console.log('adding');
-      this.setState({
-        selectedMaps: [...this.state.selectedMaps, { uuid, opacity: 50}],
-      }, this.encodeStateToHash.bind(this));
+      this.setState(
+        {
+          selectedMaps: [...this.state.selectedMaps, {uuid, opacity: 50}],
+        },
+        this.encodeStateToHash.bind(this),
+      );
     }
   }
 }
