@@ -5,7 +5,6 @@ import {Tiny,MainText, SubHeading, Heading} from '../Typeography';
 import VerticalTimeLine from './VerticalTimeLine';
 import {LayersConsumer} from '../contexts/LayersProvider';
 import Filters from './Filters';
-import 'react-tabs/style/react-tabs.css';
 
 const LayerControlsContainer = styled.div`
   position: absolute;
