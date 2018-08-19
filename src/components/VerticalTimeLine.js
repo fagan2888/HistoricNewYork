@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Timeline from 'react-dual-timeline';
 import TimelineEntry from './TimelineEntry';
-import {StyleRoot} from 'radium';
 import styled from 'styled-components';
 
 const OuterTimeLine = styled.ul`
@@ -15,9 +13,6 @@ const OuterTimeLine = styled.ul`
   list-style-type: none;
   z-index:100;
   overflow-y: scroll;
-  @media(max-width:700px){
-    display:none
-  }
 `;
 
 class VerticalTimeLine extends Component {
