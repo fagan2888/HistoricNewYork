@@ -60,7 +60,7 @@ class LayerControls extends Component {
                 onZoomToMap={context.zoomToMap}
               />
               <div>
-                <Tiny>About</Tiny>
+                <Tiny onClick={context.showAboutModal}>About</Tiny>
                 <Tiny>Share</Tiny>
               </div>
             </LayerControlsContainer>

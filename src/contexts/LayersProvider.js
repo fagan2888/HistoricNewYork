@@ -18,6 +18,7 @@ export default class LayersProvider extends React.Component {
     sizeFilter: [],
     editable: true,
     shareModalVisible: false,
+    aboutModalVisible: false,
     viewport: {
       center: position,
       zoom: 12,
@@ -35,7 +36,9 @@ export default class LayersProvider extends React.Component {
     blankSlate: this.blankSlate.bind(this),
     zoomToMap: this.zoomToMap.bind(this),
     showShareModal: this.showShareModal.bind(this),
+    showAboutModal: this.showAboutModal.bind(this),
     closeShareModal: this.closeShareModal.bind(this),
+    closeAboutModal: this.closeAboutModal.bind(this),
     getSelectedMapsWithDetails: this.getSelectedMapsWithDetails.bind(this),
     encodeShareStateToHash: this.encodeShareStateToHash.bind(this),
     //getShortURL : this.getShortURL.bind(this),
@@ -93,10 +96,7 @@ export default class LayersProvider extends React.Component {
     const hashFrag = btoa(JSON.stringify(serializableState));
     return `${window.location.href.split('#')[0]}#${hashFrag}`;
   }
-  //getShortURL(){
-  //const url = this.encodeShareStateToHash()
-  //return fetch(`http://tinyurl.com/api-create.php?url=${url}`).then(r=>r.text())
-  //}
+
   encodeStateToHash() {
     const serializableState = {
       viewport: this.state.viewport,
@@ -165,9 +165,22 @@ export default class LayersProvider extends React.Component {
       shareModalVisible: true,
     });
   }
+
   closeShareModal() {
     this.setState({
       shareModalVisible: false,
+    });
+  }
+
+  showAboutModal() {
+    this.setState({
+      aboutModalVisible: true,
+    });
+  }
+
+  closeAboutModal() {
+    this.setState({
+      aboutModalVisible: false,
     });
   }
 

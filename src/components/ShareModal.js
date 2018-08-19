@@ -17,8 +17,9 @@ import {
 const SharePane = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  justify-content: space-between;
+  justify-items: center;
 `;
+
 class ShareModal extends Component {
   static propTypes = {
     children: PropTypes.node,
