@@ -42,6 +42,10 @@ class Modal extends Component {
     super(props);
   }
 
+  closeModal(event){
+    this.props.onClose()
+  }
+
   render() {
 
     if(!this.props.visible){
@@ -49,8 +53,8 @@ class Modal extends Component {
     }
 
     return (
-      <ModalOuter onClick={this.props.onClose}>
-        <ModalInner>
+      <ModalOuter onClick={this.closeModal.bind(this)}>
+        <ModalInner onClick={(e)=>e.stopPropagation()}>
           {this.props.children}
         </ModalInner>
       </ModalOuter>
