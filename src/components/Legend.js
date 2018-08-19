@@ -6,25 +6,51 @@ import LegendEntry from './LegendEntry';
 import styled from 'styled-components';
 
 const LegendContainer = styled.div`
-  display: flex;
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 30;
-  width: 500px;
-  flex-direction: column;
+  width: 300px;
   background-color: #456990;
   box-shadow: 10px 10px 52px 4px rgba(0, 0, 0, 0.59);
   box-sizing: border-box;
-  padding:20px;
-  color:white;
+  padding: 20px;
+  color: white;
+
+  @media (max-width: 700px) {
+    top:auto;
+    right: auto;
+    left:0px
+    bottom:0px;
+    width: 100%;
+    height: 200px;
+  }
+`;
+
+const LegendContainerInner = styled.div`
+  max-height: 600px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 700px){
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    align-items: start;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    height: 100%;
+    overflow-y:hidden;
+    flex-direction: row;
+  }
 `;
 
 const Actions = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-direction:row;
-`
+  flex-direction: row;
+`;
 class Legend extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -40,23 +66,33 @@ class Legend extends Component {
       <LayersConsumer>
         {context => (
           <LegendContainer>
-            {context
-              .getSelectedMapsWithDetails()
-              .map( (map,index) => (
-                  <LegendEntry {...map}
+            <LegendContainerInner>
+              {context
+                .getSelectedMapsWithDetails()
+                .map((map, index) => (
+                  <LegendEntry
+                    {...map}
                     onShowToggle={context.toggleMap}
                     onZoomToMap={context.zoomToMap}
-                    key = {`map_${index}`}
-                    onUpdateOpacity={context.updateOpacity} />
-              ))}
-              <Actions>
-                {!context.editable &&
-                  <Label onClick={context.makeMapEditable}>Edit this map</Label>
-                }
-                <Label onClick={()=> { context.showShareModal()}} >Share this map</Label>
-                <Label onClick={context.blankSlate}>Start a new map</Label>
-              </Actions>
-           </LegendContainer>
+                    key={`map_${index}`}
+                    onUpdateOpacity={context.updateOpacity}
+                  />
+                ))}
+            </LegendContainerInner>
+
+            <Actions>
+              {!context.editable && (
+                <Label onClick={context.makeMapEditable}>Edit this map</Label>
+              )}
+              <Label
+                onClick={() => {
+                  context.showShareModal();
+                }}>
+                Share this map
+              </Label>
+              <Label onClick={context.blankSlate}>Start a new map</Label>
+            </Actions>
+          </LegendContainer>
         )}
       </LayersConsumer>
     );

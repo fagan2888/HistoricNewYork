@@ -22,6 +22,9 @@ const LayerControlsContainer = styled.div`
   z-index:100;
   display:flex;
   flex-direction: column;
+  @media(max-width:700px){
+    display:none
+  }
 `;
 
 class LayerControls extends Component {
@@ -54,7 +57,7 @@ class LayerControls extends Component {
                 setLocationFliter={context.setLocationFliter}
               />
               <VerticalTimeLine
-                maps={context.filteredMaps()}
+                maps={context.filteredMaps}
                 onShowToggle={id => context.toggleMap(id)}
                 onZoomToMap={context.zoomToMap}
               />

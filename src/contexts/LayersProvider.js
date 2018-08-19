@@ -1,5 +1,9 @@
 import React from 'react';
 import * as turf from '@turf/turf';
+import {LeafletConsumer} from 'react-leaflet';
+import createHistory from "history/createBrowserHistory"
+
+const history = createHistory({basename:process.env.PUBLIC_URL+'/'})
 
 const LayersContext = React.createContext();
 const position = [40.71248, -74.007994];
@@ -18,11 +22,11 @@ export default class LayersProvider extends React.Component {
       center: position,
       zoom: 12,
     },
+    filteredMaps: [],
     textFilter: '',
     toggleMap: this.toggleMap.bind(this),
     updateOpacity: this.updateOpacity.bind(this),
     setLocationFliter: this.setLocationFliter.bind(this),
-    filteredMaps: this.filteredMaps.bind(this),
     setDateFilter: this.setDateFilter.bind(this),
     setTextFilter: this.setTextFilter.bind(this),
     setSizeFilter: this.setSizeFilter.bind(this),
@@ -30,19 +34,32 @@ export default class LayersProvider extends React.Component {
     makeMapEditable: this.makeMapEditable.bind(this),
     blankSlate: this.blankSlate.bind(this),
     zoomToMap: this.zoomToMap.bind(this),
-    showShareModal : this.showShareModal.bind(this),
-    closeShareModal : this.closeShareModal.bind(this),
+    showShareModal: this.showShareModal.bind(this),
+    closeShareModal: this.closeShareModal.bind(this),
     getSelectedMapsWithDetails: this.getSelectedMapsWithDetails.bind(this),
+    encodeShareStateToHash: this.encodeShareStateToHash.bind(this),
+    //getShortURL : this.getShortURL.bind(this),
     offset: 0,
     limit: 20,
   };
+
+  // This is a crappy hack... fix it at some point to use the map reference
 
   componentWillMount() {
     fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
-        this.setState({maps: r}, this.extractStateFromHash.bind(this));
+        this.setState({maps: r}, () => {
+          this.extractStateFromHash();
+          this.filterMaps();
+        });
       });
+    this.unlisten = history.listen(this.locationChanged.bind(this));
+
+  }
+
+  locationChanged(location,action){
+    this.extractStateFromHash()
   }
 
   makeMapEditable() {
@@ -63,6 +80,23 @@ export default class LayersProvider extends React.Component {
       this.encodeStateToHash.bind(this),
     );
   }
+
+  encodeShareStateToHash() {
+    const serializableState = {
+      viewport: this.state.viewport,
+      editable: false,
+      selectedMaps: this.state.selectedMaps.map(map => ({
+        opacity: map.opacity,
+        uuid: map.uuid,
+      })),
+    };
+    const hashFrag = btoa(JSON.stringify(serializableState));
+    return `${window.location.href.split('#')[0]}#${hashFrag}`;
+  }
+  //getShortURL(){
+  //const url = this.encodeShareStateToHash()
+  //return fetch(`http://tinyurl.com/api-create.php?url=${url}`).then(r=>r.text())
+  //}
   encodeStateToHash() {
     const serializableState = {
       viewport: this.state.viewport,
@@ -74,11 +108,12 @@ export default class LayersProvider extends React.Component {
     };
 
     const hashFrag = btoa(JSON.stringify(serializableState));
-    window.location.hash = hashFrag;
+    history.push(hashFrag);
   }
 
   extractStateFromHash() {
-    const hash = window.location.hash.slice(1);
+    const hash = history.location.pathname.slice(1);
+    console.log(hash)
     try {
       const serializableState = JSON.parse(atob(hash));
       this.setState({
@@ -101,18 +136,22 @@ export default class LayersProvider extends React.Component {
     const map = this.state.maps.features.filter(
       map => map.properties.uuid === uuid,
     )[0];
-    console.log(map);
     const boundingBox = turf.bbox(map.geometry);
-    console.log(boundingBox);
+    console.log(this.props)
+    console.log(this.props.leaflet.map._getBoundsCenterZoom(boundingBox, {}));
   }
 
   setMapViewport(viewport) {
     this.setState({viewport}, this.encodeStateToHash.bind(this));
   }
+
   setTextFilter(val) {
-    this.setState({
-      textFilter: val,
-    });
+    this.setState(
+      {
+        textFilter: val,
+      },
+      this.filterMaps,
+    );
   }
 
   setSizeFilter(val) {
@@ -126,30 +165,37 @@ export default class LayersProvider extends React.Component {
       shareModalVisible: true,
     });
   }
-  closeShareModal(){
+  closeShareModal() {
     this.setState({
-      shareModalVisible: false
-    })
-  }
-  setLocationFliter(latlng) {
-    if (latlng) {
-      this.setState({
-        locationFilter: [latlng.lng, latlng.lat],
-      });
-    } else {
-      this.setState({
-        locationFilter: null,
-      });
-    }
-  }
-
-  setDateFilter(range) {
-    this.setState({
-      dateFilter: range,
+      shareModalVisible: false,
     });
   }
 
-  filteredMaps() {
+  setLocationFliter(latlng) {
+    let newFilter = null;
+
+    if (latlng) {
+      newFilter = [latlng.lng, latlng.lat];
+    }
+    this.setState(
+      {
+        locationFilter: newFilter,
+      },
+      this.filterMaps,
+    );
+  }
+
+  setDateFilter(range) {
+    this.setState(
+      {
+        dateFilter: range,
+      },
+      this.filterMaps,
+    );
+  }
+
+  filterMaps() {
+    console.log('RUNNING FILTER');
     if (this.state.maps === null) {
       return [];
     }
@@ -157,9 +203,11 @@ export default class LayersProvider extends React.Component {
     result = this.filterGometries(result);
     result = this.filterDates(result);
     result = this.filterText(result);
-    return result
-      .map(f => f.properties)
-      .slice(this.state.offset, this.state.offset + this.state.limit);
+    this.setState({
+      filteredMaps: result
+        .map(f => f.properties)
+        .slice(this.state.offset, this.state.offset + this.state.limit),
+    });
   }
 
   filterDates(maps) {

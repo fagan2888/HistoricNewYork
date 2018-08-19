@@ -1,19 +1,42 @@
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {MainText} from '../Typeography';
+import Tooltip from 'rc-tooltip';
 import Slider from 'rc-slider';
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import {Label} from '../Typeography';
+
+import {Tiny} from '../Typeography';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as Icons from '@fortawesome/fontawesome-free-solid';
 
 import styled from 'styled-components';
 
-import 'rc-slider/assets/index.css';
+
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
+const Handle = Slider.Handle
+
+const handle = (props) => {
+  const { value, dragging, index, ...restProps } = props;
+  return (
+    <Tooltip
+      prefixCls="rc-slider-tooltip"
+      overlay={value}
+      visible={dragging}
+      placement="top"
+      key={index}
+      style={{zIndex:200000}}
+    >
+      <Handle value={value} {...restProps} />
+    </Tooltip>
+  );
+};
 
 const FilterContainer = styled.div`
   display: flex;
@@ -52,7 +75,6 @@ class Filters extends Component {
             <Label style={{color: 'white', margin: '0px'}}>
               Location Filter: {this.props.locationFilter[0].toFixed(2)},{' '}
               {this.props.locationFilter[1].toFixed(2)}
-
               <FontAwesomeIcon
                 icon={Icons.faTimes}
                 size="1x"
@@ -76,14 +98,23 @@ class Filters extends Component {
             size="1x"
             style={{color: 'white', marginRight: '10px'}}
           />
-          <Range
-            min={1700}
-            max={2000}
-            step={1}
-            value={this.props.dateFilter}
-            pushable
-            onChange={val => this.props.setDateFilter(val)}
-          />
+          <div style={{display:'flex', width:'100%',flexDirection:'row', alignItems:'center'}} >
+            <Tiny style={{marginRight:'10px'}}>
+              {this.props.dateFilter[0]}
+            </Tiny>
+            <Range
+              min={1700}
+              max={2000}
+              step={1}
+              value={this.props.dateFilter}
+              pushable
+              onChange={val => this.props.setDateFilter(val)}
+              tipFormatter={(val)=>val}
+            />
+            <Tiny style={{marginLeft:'10px'}}>
+              {this.props.dateFilter[1]}
+            </Tiny>
+          </div>
         </Filter>
         <Filter>
           <FontAwesomeIcon

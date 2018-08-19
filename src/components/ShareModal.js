@@ -32,38 +32,42 @@ class ShareModal extends Component {
   render() {
     return (
       <LayersConsumer>
-        {context => (
-          <Modal
-            onClose={context.closeShareModal}
-            visible={context.shareModalVisible}>
-            <SharePane>
-              <FacebookShareButton
-                url={window.location.href}
-                quote={'Check out this map of historic New York'}>
-                <FacebookIcon size={32} round />
-              </FacebookShareButton>
-              <TwitterShareButton
-                url={window.location.href}
-                title={'Check out this Historic map mashup for NYC'}>
-                <TwitterIcon size={32} round />
-              </TwitterShareButton>
-              <TumblrShareButton
-                url={window.location.href}
-                title={'Historic New York Map'}
-                caption={'Check out this historic map of NYC'}>
-                <TumblrIcon size={32} round />
-              </TumblrShareButton>
-              <p>Facebook</p>
-              <p>Twitter</p>
-              <p>Tumblr</p>
-              <input
-                style={{gridColumn: '1 / 4'}}
-                type="text"
-                value={window.location.href}
-              />
-            </SharePane>
-          </Modal>
-        )}
+        {context => {
+          //context.getShortURL().then(url => {
+            return (
+              <Modal
+                onClose={context.closeShareModal}
+                visible={context.shareModalVisible}>
+                <SharePane>
+                  <FacebookShareButton
+                    url={context.encodeShareStateToHash()}
+                    quote={'Check out this map of historic New York'}>
+                    <FacebookIcon size={32} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton
+                    url={context.encodeShareStateToHash()}
+                    title={'Check out this Historic map mashup for NYC'}>
+                    <TwitterIcon size={32} round />
+                  </TwitterShareButton>
+                  <TumblrShareButton
+                    url={context.encodeShareStateToHash()}
+                    title={'Historic New York Map'}
+                    caption={'Check out this historic map of NYC'}>
+                    <TumblrIcon size={32} round />
+                  </TumblrShareButton>
+                  <p>Facebook</p>
+                  <p>Twitter</p>
+                  <p>Tumblr</p>
+                  <input
+                    style={{gridColumn: '1 / 4'}}
+                    type="text"
+                    value={context.encodeShareStateToHash()}
+                  />
+                </SharePane>
+              </Modal>
+            );
+          //});
+        }}
       </LayersConsumer>
     );
   }

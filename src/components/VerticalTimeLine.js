@@ -15,6 +15,9 @@ const OuterTimeLine = styled.ul`
   list-style-type: none;
   z-index:100;
   overflow-y: scroll;
+  @media(max-width:700px){
+    display:none
+  }
 `;
 
 class VerticalTimeLine extends Component {

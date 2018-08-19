@@ -1,22 +1,35 @@
 import React  from 'react'
 import styled from 'styled-components'
+import {Tiny} from './Typeography'
 
-export const DateRange = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  border-bottom: 1px solid white;
-  width: 20%;
-`;
+export const DateRange = (props) =>(
+  <div style={{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: '10px',
+    borderBottom: '1px solid white',
+  }}>
+    <Tiny>{props.validSince}</Tiny>
+    { props.validSince !== props.validUntil ? (
+      <React.Fragment>
+        <Tiny>-</Tiny>
+        <Tiny>{props.validUntil}</Tiny>)
+      </React.Fragment>)
+      : ''
+    }
+  </div>
+)
 
 export const MapThumb = (props)=>(
-    <img
-      style={props.style}
-      src={`https://images.nypl.org/index.php?id=${
-        props.imageID
-      }&t=r&download=1`}
-    />
+    <a href={props.link} target="_blank">
+      <img
+        style={props.style}
+        src={`https://images.nypl.org/index.php?id=${
+          props.imageID
+        }&t=r&download=1`}
+      />
+    </a>
 )
 export const TimeLineEntryContents = styled.div`
   color: white;

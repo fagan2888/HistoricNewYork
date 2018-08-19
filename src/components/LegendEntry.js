@@ -16,6 +16,11 @@ import 'rc-slider/assets/index.css';
 
 const LedgendEntryContainer = styled.div`
   color: white;
+  @media (max-width: 700px) and (max-device-width : 700px)  {
+    height:100%;
+    min-width: 300px;
+    margin-right:20px
+  }
 `;
 
 const TitleAndImage = styled.div`
@@ -24,39 +29,43 @@ const TitleAndImage = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
 function LegendEntry({...props}) {
   return (
     <LedgendEntryContainer>
-      <DateRange>
-        <Tiny>{props.validSince}</Tiny>
-        <Tiny>{props.validUntil}</Tiny>
-      </DateRange>
+      <div style={{display:'flex', flexDirection: 'row', justifyContent:'space-between',alignItems:'center'}}>
 
-      <FontAwesomeIcon
-        className="map-button"
-        icon={Icons.faMap}
-        size="1x"
-        style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
-        onClick={() => {
-          props.onShowToggle(props.uuid);
-        }}
-      />
-      <FontAwesomeIcon
-        className="map-button"
-        icon={Icons.faEye}
-        size="1x"
-        style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
-        onClick={() => {
-          props.onZoomToMap(props.uuid);
-        }}
-      />
+        <DateRange validSince={props.validSince} validUntil={props.validUntil} />
+
+        <FontAwesomeIcon
+          className="map-button"
+          icon={Icons.faMap}
+          size="1x"
+          style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', marginLeft:'auto'}}
+          onClick={() => {
+            props.onShowToggle(props.uuid);
+          }}
+        />
+        <FontAwesomeIcon
+          className="map-button"
+          icon={Icons.faEye}
+          size="1x"
+          style={{textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', marginRight:'0px'}}
+          onClick={() => {
+            props.onZoomToMap(props.uuid);
+          }}
+        />
+      </div>
+
       <TitleAndImage>
         <MapThumb
           imageID={props.imageID}
-          style={{width: '150px', marginRight: '20px'}}
+          style={{width:'100%', height:'100%'}}
+          link ={props.link}
         />
-        <MainText>{props.name}</MainText>
       </TitleAndImage>
+
+      <MainText style={{margin:'10px 0px 0px 0px'}}>{props.name}</MainText>
       <Slider
         min={0}
         max={100}

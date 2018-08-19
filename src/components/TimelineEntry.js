@@ -27,10 +27,7 @@ function TimelineEntry({...props}) {
   return (
     <TimeLineEntryContainer>
       <TimeLineEntryContents>
-        <DateRange>
-          <Tiny>{props.validSince}</Tiny> <Tiny>-</Tiny>
-          <Tiny>{props.validUntil}</Tiny>
-        </DateRange>
+        <DateRange validSince={props.validSince} validUntil={props.validUntil} />
         <FontAwesomeIcon
           className="map-button"
           icon={Icons.faMap}
@@ -50,9 +47,7 @@ function TimelineEntry({...props}) {
           }}
         />
         <SubHeading>{props.title}</SubHeading>
-        <a href={props.link} target="_blank">
-          <MapThumb style={{maxWidth: '300px'}} imageID={props.imageID} />
-        </a>
+        <MapThumb style={{maxWidth: '300px'}} imageID={props.imageID} link={props.link}/>
         <MainText style={{paddingLeft: '10px'}}>{props.description}</MainText>
       </TimeLineEntryContents>
       <TimeLineSegment />
