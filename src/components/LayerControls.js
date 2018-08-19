@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Tiny,MainText, SubHeading, Heading} from '../Typeography';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import VerticalTimeLine from './VerticalTimeLine';
 import {LayersConsumer} from '../contexts/LayersProvider';
 import Filters from './Filters';
