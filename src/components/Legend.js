@@ -23,7 +23,7 @@ const LegendContainer = styled.div`
     left:0px
     bottom:0px;
     width: 100%;
-    height: 200px;
+    height: 250px;
   }
 `;
 
@@ -34,16 +34,14 @@ const LegendContainerInner = styled.div`
   flex-direction: column;
 
   @media (max-width: 700px) {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    align-items: start;
+    display: auto;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     height: 100%;
     overflow-y: hidden;
+    overflow-x:scroll
     flex-direction: row;
-    width: 400px;
+    width:auto;
   }
 `;
 

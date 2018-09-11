@@ -18,7 +18,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-
           <LayersProvider map={this.state.map} >
             <MapContainer  onHaveMap={(map) => this.setState({map})} />
           <LayerControls />

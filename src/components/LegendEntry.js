@@ -19,7 +19,7 @@ const LedgendEntryContainer = styled.div`
   @media (max-width: 700px) and (max-device-width : 700px)  {
     height:100%;
     width: 300px;
-    margin-right:20px
+    margin-right: 20px
   }
 `;
 
@@ -63,9 +63,10 @@ function LegendEntry({...props}) {
           style={{width:'100%', height:'100%'}}
           link ={props.link}
         />
+
       </TitleAndImage>
 
-      <MainText style={{margin:'10px 0px 0px 0px'}}>{props.name}</MainText>
+
       <Slider
         min={0}
         max={100}
