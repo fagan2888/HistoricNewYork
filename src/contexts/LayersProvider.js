@@ -1,10 +1,10 @@
 import React from 'react';
 import * as turf from '@turf/turf';
 import {LeafletConsumer} from 'react-leaflet';
-import createHistory from "history/createBrowserHistory"
-import Papa from 'papaparse'
+import createHistory from 'history/createBrowserHistory';
+import Papa from 'papaparse';
 
-const history = createHistory({basename:process.env.PUBLIC_URL+'/'})
+const history = createHistory({basename: process.env.PUBLIC_URL + '/'});
 
 const LayersContext = React.createContext();
 const position = [40.71248, -74.007994];
@@ -47,37 +47,53 @@ export default class LayersProvider extends React.Component {
     //getShortURL : this.getShortURL.bind(this),
     page: 0,
     limit: 20,
-    mapsCSVLoaded : false,
-    mapGeoJSONCache: []
+    mapsCSVLoaded: false,
+    mapGeoJSONCache: [],
   };
 
   // This is a crappy hack... fix it at some point to use the map reference
 
-  goToNextPage(){
-    this.setState({
-      page: Math.min(this.state.page+1, this.state.noPages)
-    })
+  areaCategory(area) {
+    if (area < 600000) {
+      return 'Block';
+    }
+    if (area < 50058561) {
+      return 'Neighborhood';
+    }
+    if (area < 314614183) {
+      return 'City';
+    } else {
+      return 'Country';
+    }
   }
 
-  goToPrevPage(){
+  goToNextPage() {
     this.setState({
-      page: Math.max(this.state.page-1, 0)
-    })
+      page: Math.min(this.state.page + 1, this.state.noPages),
+    });
   }
 
-  loadMapsCSV(){
+  goToPrevPage() {
+    this.setState({
+      page: Math.max(this.state.page - 1, 0),
+    });
+  }
+
+  loadMapsCSV() {
     fetch('maps.csv')
-      .then(res=>res.text()).then(csv=>Papa.parse(csv, {header:true})).then((result)=>{
-        this.setState({maps: result.data, mapsCSVLoaded: true})
-      })
+      .then(res => res.text())
+      .then(csv => Papa.parse(csv, {header: true}))
+      .then(result => {
+        this.setState({maps: result.data, mapsCSVLoaded: true});
+      });
   }
-  loadMapFromGEOJson(uuid){
-    fetch(`map_details/${uuid}.geojson`).then((res)=>res.json()).then((geo)=>{
-
-    })
+  loadMapFromGEOJson(uuid) {
+    fetch(`map_details/${uuid}.geojson`)
+      .then(res => res.json())
+      .then(geo => {});
   }
   componentWillMount() {
-    this.loadMapsCSV()
+    this.loadMapsCSV();
     fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
@@ -89,8 +105,8 @@ export default class LayersProvider extends React.Component {
     this.unlisten = history.listen(this.locationChanged.bind(this));
   }
 
-  locationChanged(location,action){
-    this.extractStateFromHash()
+  locationChanged(location, action) {
+    this.extractStateFromHash();
   }
 
   makeMapEditable() {
@@ -141,7 +157,7 @@ export default class LayersProvider extends React.Component {
 
   extractStateFromHash() {
     const hash = history.location.pathname.slice(1);
-    console.log(hash)
+    console.log(hash);
     try {
       const serializableState = JSON.parse(atob(hash));
       this.setState({
@@ -165,7 +181,7 @@ export default class LayersProvider extends React.Component {
       map => map.properties.uuid === uuid,
     )[0];
     const boundingBox = turf.bbox(map.geometry);
-    console.log(this.props)
+    console.log(this.props);
     console.log(this.props.leaflet.map._getBoundsCenterZoom(boundingBox, {}));
   }
 
@@ -182,10 +198,13 @@ export default class LayersProvider extends React.Component {
     );
   }
 
-  setSizeFilter(val) {
-    this.setState({
-      sizeFilter: val,
-    });
+  setSizeFilter(vals) {
+    this.setState(
+      {
+        sizeFilter: vals,
+      },
+      this.filterMaps,
+    );
   }
 
   showShareModal() {
@@ -236,22 +255,21 @@ export default class LayersProvider extends React.Component {
   }
 
   filterMaps() {
-    console.log('RUNNING FILTER');
     if (this.state.maps === null) {
       return [];
     }
     let result = this.state.maps.features;
-    const {page, limit} = this.state
+    const {page, limit} = this.state;
 
-    result = this.filterGometries(result);
+    result = this.filterSize(result);
     result = this.filterDates(result);
     result = this.filterText(result);
+    result = this.filterGometries(result);
     this.setState({
       totalResults: result.length,
-      page:0,
+      page: 0,
       noPages: Math.ceil(result.length / this.state.limit),
-      filteredMaps: result
-        .map(f => f.properties)
+      filteredMaps: result.map(f => f.properties),
     });
   }
 
@@ -280,6 +298,22 @@ export default class LayersProvider extends React.Component {
         turf.booleanContains(map, turf.point(this.state.locationFilter)),
       );
     }
+    return result;
+  }
+
+  filterSize(maps) {
+    let result = maps;
+
+    if (this.state.sizeFilter.length == 0) {
+      return result;
+    }
+
+    if (this.state.sizeFilter) {
+      result = result.filter(map =>
+        this.state.sizeFilter.includes(this.areaCategory(map.properties.area)),
+      );
+    }
+
     return result;
   }
 

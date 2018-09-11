@@ -146,6 +146,7 @@ class Filters extends Component {
             }}
             value={this.props.sizeFilter}
             onChange={v => {
+              console.log('setting filter for ', v)
               this.props.setSizeFilter(v);
             }}>
             <Checkbox value="Block" /> <Label>Block</Label>
