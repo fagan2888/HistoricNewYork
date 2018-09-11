@@ -1,7 +1,6 @@
 import React from 'react';
 import * as turf from '@turf/turf';
 import createHistory from 'history/createBrowserHistory';
-import Papa from 'papaparse';
 import {withLeaflet} from 'react-leaflet'
 
 const history = createHistory({basename: process.env.PUBLIC_URL + '/'});
@@ -24,6 +23,7 @@ class LayersProvider extends React.Component {
       center: position,
       zoom: 12,
     },
+    haveReadInitalURLState:false,
     filteredMaps: [],
     textFilter: '',
     toggleMap: this.toggleMap.bind(this),
@@ -84,21 +84,20 @@ class LayersProvider extends React.Component {
     });
   }
 
-  loadMapsCSV() {
-    fetch('maps.csv')
-      .then(res => res.text())
-      .then(csv => Papa.parse(csv, {header: true}))
-      .then(result => {
-        this.setState({maps: result.data, mapsCSVLoaded: true});
-      });
-  }
-  loadMapFromGEOJson(uuid) {
-    fetch(`map_details/${uuid}.geojson`)
-      .then(res => res.json())
-      .then(geo => {});
-  }
+  //loadMapsCSV() {
+    //fetch('maps.csv')
+      //.then(res => res.text())
+      //.then(csv => Papa.parse(csv, {header: true}))
+      //.then(result => {
+        //this.setState({maps: result.data, mapsCSVLoaded: true});
+      //});
+  //}
+  //loadMapFromGEOJson(uuid) {
+    //fetch(`map_details/${uuid}.geojson`)
+      //.then(res => res.json())
+      //.then(geo => {});
+  //}
   componentWillMount() {
-    this.loadMapsCSV();
     fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
@@ -134,16 +133,20 @@ class LayersProvider extends React.Component {
   }
 
   encodeShareStateToHash() {
-    const serializableState = {
-      viewport: this.state.viewport,
-      editable: false,
-      selectedMaps: this.state.selectedMaps.map(map => ({
-        opacity: map.opacity,
-        uuid: map.uuid,
-      })),
-    };
-    const hashFrag = btoa(JSON.stringify(serializableState));
-    return `${window.location.href.split('#')[0]}#${hashFrag}`;
+    if(this.state.haveReadInitalURLState){
+      const serializableState = {
+        viewport: this.state.viewport,
+        editable: false,
+        selectedMaps: this.state.selectedMaps.map(map => ({
+          opacity: map.opacity,
+          uuid: map.uuid,
+        })),
+      };
+      const hashFrag = btoa(JSON.stringify(serializableState));
+      const base = window.location.href.split('/').slice(0,-1).join('/')
+      const url = `${base}/${hashFrag}`;
+      return(url)
+    }
   }
 
   encodeStateToHash() {
@@ -164,8 +167,10 @@ class LayersProvider extends React.Component {
     const hash = history.location.pathname.slice(1);
     try {
       const serializableState = JSON.parse(atob(hash));
+      console.log("inital state ", serializableState)
       this.setState({
         ...serializableState,
+        haveReadInitalURLState: true
       });
     } catch (e) {
       window.location.hash = '';
@@ -188,6 +193,7 @@ class LayersProvider extends React.Component {
     const bounds = [[boundingBox[1], boundingBox[0]],[boundingBox[3],boundingBox[2]]]
     this.props.map.fitBounds(bounds)
   }
+
   setMapViewport(viewport) {
     this.setState({viewport}, this.encodeStateToHash.bind(this));
   }
