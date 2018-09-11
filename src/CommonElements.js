@@ -1,6 +1,7 @@
 import React  from 'react'
 import styled from 'styled-components'
 import {Tiny} from './Typeography'
+import {LazyImage} from 'react-lazy-images'
 
 export const DateRange = (props) =>(
   <div style={{
