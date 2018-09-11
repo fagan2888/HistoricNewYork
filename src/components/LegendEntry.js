@@ -63,8 +63,9 @@ function LegendEntry({...props}) {
           style={{width:'100%', height:'100%'}}
           link ={props.link}
         />
-
       </TitleAndImage>
+
+      <MainText style={{margin:'10px 0px 0px 0px'}}>{props.name}</MainText>
 
 
       <Slider

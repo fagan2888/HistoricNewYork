@@ -31,7 +31,7 @@ export const MapThumb = (props)=>(
         }&t=r&download=1`}
         alt="props.imageID"
         placeholder={({ imageProps, ref }) => (
-          <img ref={ref} src="/img/porto_buildings_lowres.jpg" alt={imageProps.alt} />
+          <img ref={ref} src="/ajax-loader.gif" alt={'Loading...'} />
         )}
         actual={({ imageProps }) => <img {...imageProps}
         style={props.style}
@@ -45,6 +45,7 @@ export const TimeLineEntryContents = styled.div`
   color: white;
   width: 90%;
 `;
+
 
 export const TimeLineSegment = () => (
   <div style={{position: 'relative', width: '20px', marginLeft:'25px'}}>
