@@ -69,8 +69,7 @@ class LayerControls extends Component {
                 onZoomToMap={context.zoomToMap}
               />
               <div>
-                <Tiny onClick={context.showAboutModal}>About</Tiny>
-                <Tiny>Share</Tiny>
+                <Tiny style={{color:'white'}} onClick={context.showAboutModal}>About</Tiny>
               </div>
             </LayerControlsContainer>
           )
