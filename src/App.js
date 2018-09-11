@@ -8,14 +8,18 @@ import AboutModal from './components/AboutModal';
 import VerticalTimeLine from './components/VerticalTimeLine';
 import Legend from './components/Legend';
 import LayersProvider from './contexts/LayersProvider';
-import {LeafletConsumer} from 'react-leaflet'
+import {LeafletConsumer,LeafletProvider} from 'react-leaflet'
 
+
+//TODO Must be a better way to get the map object
 class App extends Component {
+
+  state= {}
   render() {
     return (
       <div className="App">
-        <LayersProvider>
-          <MapContainer />
+          <LayersProvider map={this.state.map} >
+            <MapContainer  onHaveMap={(map) => this.setState({map})} />
           <LayerControls />
           <Legend />
           <ShareModal />

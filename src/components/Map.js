@@ -25,6 +25,9 @@ class MapContainer extends Component {
     super(props);
   }
 
+  componentDidMount() {
+     this.props.onHaveMap(this.map.contextValue.map)
+  }
   render() {
     const position = [40.71248, -74.007994];
     return (
@@ -34,7 +37,9 @@ class MapContainer extends Component {
             viewport={context.viewport}
             onViewportChange= { (v) => context.setMapViewport(v)}
             style={{zIndex: 1, height: '100%'}}
-            onClick={loc => context.setLocationFliter(loc.latlng)}>
+            onClick={loc => context.setLocationFliter(loc.latlng)}
+            ref={(map)=>this.map = map}
+          >
             <TileLayer
               attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'"
               url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"

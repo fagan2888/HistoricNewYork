@@ -1,15 +1,15 @@
 import React from 'react';
 import * as turf from '@turf/turf';
-import {LeafletConsumer} from 'react-leaflet';
 import createHistory from 'history/createBrowserHistory';
 import Papa from 'papaparse';
+import {withLeaflet} from 'react-leaflet'
 
 const history = createHistory({basename: process.env.PUBLIC_URL + '/'});
 
 const LayersContext = React.createContext();
 const position = [40.71248, -74.007994];
 
-export default class LayersProvider extends React.Component {
+class LayersProvider extends React.Component {
   state = {
     maps: null,
     selectedMaps: [],
@@ -29,6 +29,7 @@ export default class LayersProvider extends React.Component {
     toggleMap: this.toggleMap.bind(this),
     updateOpacity: this.updateOpacity.bind(this),
     setLocationFliter: this.setLocationFliter.bind(this),
+    setMapElement: this.setMapElement.bind(this),
     setDateFilter: this.setDateFilter.bind(this),
     setTextFilter: this.setTextFilter.bind(this),
     setSizeFilter: this.setSizeFilter.bind(this),
@@ -65,6 +66,10 @@ export default class LayersProvider extends React.Component {
     } else {
       return 'Country';
     }
+  }
+
+  setMapElement(map){
+    this.map = map
   }
 
   goToNextPage() {
@@ -157,7 +162,6 @@ export default class LayersProvider extends React.Component {
 
   extractStateFromHash() {
     const hash = history.location.pathname.slice(1);
-    console.log(hash);
     try {
       const serializableState = JSON.parse(atob(hash));
       this.setState({
@@ -180,11 +184,10 @@ export default class LayersProvider extends React.Component {
     const map = this.state.maps.features.filter(
       map => map.properties.uuid === uuid,
     )[0];
-    const boundingBox = turf.bbox(map.geometry);
-    console.log(this.props);
-    console.log(this.props.leaflet.map._getBoundsCenterZoom(boundingBox, {}));
+    const boundingBox =turf.bbox(map.geometry);
+    const bounds = [[boundingBox[1], boundingBox[0]],[boundingBox[3],boundingBox[2]]]
+    this.props.map.fitBounds(bounds)
   }
-
   setMapViewport(viewport) {
     this.setState({viewport}, this.encodeStateToHash.bind(this));
   }
@@ -354,4 +357,5 @@ export default class LayersProvider extends React.Component {
   }
 }
 
+export default withLeaflet(LayersProvider)
 export const LayersConsumer = LayersContext.Consumer;
