@@ -16,14 +16,12 @@ import * as Icons from '@fortawesome/fontawesome-free-solid';
 
 import styled from 'styled-components';
 
-
-
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
-const Handle = Slider.Handle
+const Handle = Slider.Handle;
 
-const handle = (props) => {
-  const { value, dragging, index, ...restProps } = props;
+const handle = props => {
+  const {value, dragging, index, ...restProps} = props;
   return (
     <Tooltip
       prefixCls="rc-slider-tooltip"
@@ -31,8 +29,7 @@ const handle = (props) => {
       visible={dragging}
       placement="top"
       key={index}
-      style={{zIndex:200000}}
-    >
+      style={{zIndex: 200000}}>
       <Handle value={value} {...restProps} />
     </Tooltip>
   );
@@ -78,7 +75,11 @@ class Filters extends Component {
               <FontAwesomeIcon
                 icon={Icons.faTimes}
                 size="1x"
-                style={{ marginLeft:'10px', color:'hwite', textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)'}}
+                style={{
+                  marginLeft: '10px',
+                  color: 'hwite',
+                  textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',
+                }}
                 onClick={e => this.props.setLocationFliter(null)}
               />
             </Label>
@@ -98,8 +99,14 @@ class Filters extends Component {
             size="1x"
             style={{color: 'white', marginRight: '10px'}}
           />
-          <div style={{display:'flex', width:'100%',flexDirection:'row', alignItems:'center'}} >
-            <Tiny style={{marginRight:'10px'}}>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Tiny style={{marginRight: '10px'}}>
               {this.props.dateFilter[0]}
             </Tiny>
             <Range
@@ -109,11 +116,9 @@ class Filters extends Component {
               value={this.props.dateFilter}
               pushable
               onChange={val => this.props.setDateFilter(val)}
-              tipFormatter={(val)=>val}
+              tipFormatter={val => val}
             />
-            <Tiny style={{marginLeft:'10px'}}>
-              {this.props.dateFilter[1]}
-            </Tiny>
+            <Tiny style={{marginLeft: '10px'}}>{this.props.dateFilter[1]}</Tiny>
           </div>
         </Filter>
         <Filter>
@@ -138,7 +143,7 @@ class Filters extends Component {
           />
           <CheckboxGroup
             style={{
-              flex:1,
+              flex: 1,
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -146,7 +151,7 @@ class Filters extends Component {
             }}
             value={this.props.sizeFilter}
             onChange={v => {
-              console.log('setting filter for ', v)
+              console.log('setting filter for ', v);
               this.props.setSizeFilter(v);
             }}>
             <Checkbox value="Block" /> <Label>Block</Label>
@@ -156,20 +161,19 @@ class Filters extends Component {
           </CheckboxGroup>
         </Filter>
         <Filter
-            style={{
-              flex:1,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <Tiny onClick={this.props.onPreviousPage}>Prev</Tiny>
-
-          <Tiny>{this.props.totalResults} Results</Tiny>
-          <Tiny>Page: {this.props.page + 1} of {this.props.noPages}</Tiny>
+          <Tiny>
+            {this.props.totalResults} Results | Page: {this.props.page + 1} of{' '}
+            {this.props.noPages}
+          </Tiny>
           <Tiny onClick={this.props.onNextPage}>Next</Tiny>
-
         </Filter>
       </FilterContainer>
     );
