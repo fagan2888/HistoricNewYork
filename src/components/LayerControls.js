@@ -83,7 +83,6 @@ class LayerControls extends Component {
                 onShowToggle={id => context.toggleMap(id)}
                 onZoomToMap={context.zoomToMap}
               />
-              }
               <div>
                 <Tiny style={{color: 'white'}} onClick={context.showAboutModal}>
                   About
