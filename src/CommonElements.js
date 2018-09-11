@@ -23,11 +23,20 @@ export const DateRange = (props) =>(
 
 export const MapThumb = (props)=>(
     <a href={props.link} target="_blank">
-      <img
-        style={props.style}
+      <LazyImage
+
         src={`https://images.nypl.org/index.php?id=${
           props.imageID
         }&t=r&download=1`}
+        alt="props.imageID"
+        placeholder={({ imageProps, ref }) => (
+          <img ref={ref} src="/img/porto_buildings_lowres.jpg" alt={imageProps.alt} />
+        )}
+        actual={({ imageProps }) => <img {...imageProps}
+        style={props.style}
+            />}
+      />
+      <img
       />
     </a>
 )

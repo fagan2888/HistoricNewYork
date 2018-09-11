@@ -6999,6 +6999,12 @@ react-fontawesome@^1.6.1:
   dependencies:
     prop-types "^15.5.6"
 
+react-intersection-observer@^6.1.0:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-6.2.2.tgz#b88a83d5317842a4c9f7992428468dbadcfe0ef7"
+  dependencies:
+    invariant "^2.2.4"
+
 react-is@^16.3.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.1.tgz#d624c4650d2c65dbd52c72622bbf389435d9776e"
@@ -7006,6 +7012,13 @@ react-is@^16.3.1:
 react-is@^16.3.2:
   version "16.4.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.2.tgz#84891b56c2b6d9efdee577cc83501dfc5ecead88"
+
+react-lazy-images@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-lazy-images/-/react-lazy-images-1.1.0.tgz#c865445c96e568a6249db03a2bb2dccd49cb6f50"
+  dependencies:
+    react-intersection-observer "^6.1.0"
+    unionize "^2.1.2"
 
 react-leaflet@^2.0:
   version "2.0.1"
@@ -8294,6 +8307,10 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^0.4.3"
+
+unionize@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/unionize/-/unionize-2.1.2.tgz#2513b148de515bec93f045d1685bd88eab62b608"
 
 uniq@^1.0.1:
   version "1.0.1"
