@@ -55,13 +55,13 @@ class LayersProvider extends React.Component {
   // This is a crappy hack... fix it at some point to use the map reference
 
   areaCategory(area) {
-    if (area < 600000) {
+    if (area < 10) {
       return 'Block';
     }
-    if (area < 50058561) {
+    if (area <  32.08029) {
       return 'Neighborhood';
     }
-    if (area < 314614183) {
+    if (area < 2000) {
       return 'City';
     } else {
       return 'Country';
