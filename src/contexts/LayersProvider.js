@@ -2,6 +2,7 @@ import React from 'react';
 import * as turf from '@turf/turf';
 import {LeafletConsumer} from 'react-leaflet';
 import createHistory from "history/createBrowserHistory"
+import Papa from 'papaparse'
 
 const history = createHistory({basename:process.env.PUBLIC_URL+'/'})
 
@@ -41,14 +42,42 @@ export default class LayersProvider extends React.Component {
     closeAboutModal: this.closeAboutModal.bind(this),
     getSelectedMapsWithDetails: this.getSelectedMapsWithDetails.bind(this),
     encodeShareStateToHash: this.encodeShareStateToHash.bind(this),
+    goToNextPage: this.goToNextPage.bind(this),
+    goToPrevPage: this.goToPrevPage.bind(this),
     //getShortURL : this.getShortURL.bind(this),
-    offset: 0,
+    page: 0,
     limit: 20,
+    mapsCSVLoaded : false,
+    mapGeoJSONCache: []
   };
 
   // This is a crappy hack... fix it at some point to use the map reference
 
+  goToNextPage(){
+    this.setState({
+      page: Math.min(this.state.page+1, this.state.noPages)
+    })
+  }
+
+  goToPrevPage(){
+    this.setState({
+      page: Math.max(this.state.page-1, 0)
+    })
+  }
+
+  loadMapsCSV(){
+    fetch('maps.csv')
+      .then(res=>res.text()).then(csv=>Papa.parse(csv, {header:true})).then((result)=>{
+        this.setState({maps: result.data, mapsCSVLoaded: true})
+      })
+  }
+  loadMapFromGEOJson(uuid){
+    fetch(`map_details/${uuid}.geojson`).then((res)=>res.json()).then((geo)=>{
+
+    })
+  }
   componentWillMount() {
+    this.loadMapsCSV()
     fetch('maps.geojson')
       .then(m => m.json())
       .then(r => {
@@ -58,7 +87,6 @@ export default class LayersProvider extends React.Component {
         });
       });
     this.unlisten = history.listen(this.locationChanged.bind(this));
-
   }
 
   locationChanged(location,action){
@@ -213,13 +241,17 @@ export default class LayersProvider extends React.Component {
       return [];
     }
     let result = this.state.maps.features;
+    const {page, limit} = this.state
+
     result = this.filterGometries(result);
     result = this.filterDates(result);
     result = this.filterText(result);
     this.setState({
+      totalResults: result.length,
+      page:0,
+      noPages: Math.ceil(result.length / this.state.limit),
       filteredMaps: result
         .map(f => f.properties)
-        .slice(this.state.offset, this.state.offset + this.state.limit),
     });
   }
 

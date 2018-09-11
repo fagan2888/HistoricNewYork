@@ -18,7 +18,7 @@ const LedgendEntryContainer = styled.div`
   color: white;
   @media (max-width: 700px) and (max-device-width : 700px)  {
     height:100%;
-    min-width: 300px;
+    width: 300px;
     margin-right:20px
   }
 `;

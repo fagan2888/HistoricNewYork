@@ -31,7 +31,7 @@ class VerticalTimeLine extends Component {
       <OuterTimeLine>
         {this.props.maps.map(map => (
           <TimelineEntry
-            key={map.name}
+            key={map.uuid}
             title={map.name}
             description={map.description}
             validSince={map.validSince}

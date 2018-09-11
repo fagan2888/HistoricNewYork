@@ -43,6 +43,7 @@ const LegendContainerInner = styled.div`
     height: 100%;
     overflow-y:hidden;
     flex-direction: row;
+    width:400px
   }
 `;
 

@@ -154,6 +154,22 @@ class Filters extends Component {
             <Checkbox value="Country" /> <Label>Country</Label>
           </CheckboxGroup>
         </Filter>
+        <Filter
+            style={{
+              flex:1,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+          <Tiny onClick={this.props.onPreviousPage}>Prev</Tiny>
+
+          <Tiny>{this.props.totalResults} Results</Tiny>
+          <Tiny>Page: {this.props.page + 1} of {this.props.noPages}</Tiny>
+          <Tiny onClick={this.props.onNextPage}>Next</Tiny>
+
+        </Filter>
       </FilterContainer>
     );
   }

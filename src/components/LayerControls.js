@@ -35,6 +35,10 @@ class LayerControls extends Component {
     super(props);
   }
 
+  slicedMaps(maps, page, limit){
+    return maps.slice(page*limit, (page+1)*limit)
+  }
+
   render() {
     return (
       <LayersConsumer>
@@ -53,9 +57,14 @@ class LayerControls extends Component {
                 setTextFilter={context.setTextFilter}
                 setSizeFilter={context.setSizeFilter}
                 setLocationFliter={context.setLocationFliter}
+                totalResults= {context.totalResults}
+                page= {context.page}
+                noPages = {context.noPages}
+                onNextPage={context.goToNextPage}
+                onPreviousPage = {context.goToPrevPage}
               />
               <VerticalTimeLine
-                maps={context.filteredMaps}
+                maps={this.slicedMaps(context.filteredMaps, context.page, context.limit)}
                 onShowToggle={id => context.toggleMap(id)}
                 onZoomToMap={context.zoomToMap}
               />
